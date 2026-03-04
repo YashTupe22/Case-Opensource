@@ -36,6 +36,7 @@
 }
 
 .explore__logo {
+  display: block;
   font-family: var(--font-heading);
   font-size: 28px;
   font-weight: 800;

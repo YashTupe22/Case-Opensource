@@ -10,8 +10,13 @@
     const container = document.getElementById('profileContainer');
 
     // ── Extract username from URL ──
+    // Supports both ?u=username and /@username (Vercel rewrite)
     const params = new URLSearchParams(window.location.search);
-    const username = params.get('u');
+    let username = params.get('u');
+    if (!username) {
+        const pathMatch = window.location.pathname.match(/^\/@([^/]+)/);
+        if (pathMatch) username = pathMatch[1];
+    }
 
     if (!username) {
         showNotFound();
@@ -57,8 +62,7 @@
             // Certificate modal events
             initCertModal();
 
-            // Increment views (fire-and-forget)
-            DataService.incrementViews(data.user.uid).catch(() => {});
+            // Views are already incremented inside getPublicProfile
 
         } catch (err) {
             console.error('Failed to load profile:', err);
@@ -323,6 +327,14 @@
 
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+
+            // Re-trigger slide-in animation
+            const content = modal.querySelector('.cert-modal__content');
+            if (content) {
+                content.style.animation = 'none';
+                content.offsetHeight; // force reflow
+                content.style.animation = '';
+            }
         });
 
         // Close handlers

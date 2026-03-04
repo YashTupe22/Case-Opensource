@@ -111,9 +111,9 @@
 
         usernameTimer = setTimeout(async () => {
             try {
-                const available = await DataService.checkUsername(val);
+                const result = await DataService.checkUsername(val);
                 if (signupUsername.value !== val) return; // stale check
-                if (available) {
+                if (result.available) {
                     usernameHint.textContent = '✓ Username is available';
                     usernameHint.className = 'auth__hint auth__hint--success';
                 } else {
@@ -272,9 +272,9 @@
 
         gUsernameTimer = setTimeout(async () => {
             try {
-                const available = await DataService.checkUsername(val);
+                const result = await DataService.checkUsername(val);
                 if (googleUsernameInput.value !== val) return;
-                if (available) {
+                if (result.available) {
                     googleUsernameHint.textContent = '\u2713 Username is available';
                     googleUsernameHint.className = 'auth__hint auth__hint--success';
                 } else {

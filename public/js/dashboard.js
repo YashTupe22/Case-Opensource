@@ -438,9 +438,10 @@
             } else {
                 await DataService.addProject({ name, description, liveUrl, techStack: modalTags });
             }
+            const wasEditing = !!editingProjectId;
             closeProjectModal();
             await loadProjects();
-            Utils.toast(editingProjectId ? 'Project updated' : 'Project added', 'success');
+            Utils.toast(wasEditing ? 'Project updated' : 'Project added', 'success');
         } catch (err) {
             Utils.toast('Something went wrong', 'error');
         } finally {
@@ -555,6 +556,8 @@
     //  MY CASE CODE
     // ═══════════════════════════════════════
 
+    let caseCodeListenersAttached = false;
+
     async function loadCaseCode() {
         const user = await DataService.getUser();
         const projects = await DataService.getProjects();
@@ -571,22 +574,26 @@
         // QR
         Utils.generateQR($('#caseCodeQR'), fullUrl, 160);
 
-        // Share buttons
-        $('#caseShareWA')?.addEventListener('click', () => {
-            Utils.shareWhatsApp(profileUrl, `Check out my portfolio: ${profileUrl}`);
-        });
-        $('#caseShareEmail')?.addEventListener('click', () => {
-            Utils.shareEmail(profileUrl, user.fullName);
-        });
-        $('#caseDownloadQR')?.addEventListener('click', () => {
-            const qrCanvas = $('#caseCodeQR canvas');
-            if (qrCanvas) {
-                const link = document.createElement('a');
-                link.download = `CASE-QR-${user.username}.png`;
-                link.href = qrCanvas.toDataURL();
-                link.click();
-            }
-        });
+        // Share buttons — attach only once
+        if (!caseCodeListenersAttached) {
+            caseCodeListenersAttached = true;
+
+            $('#caseShareWA')?.addEventListener('click', () => {
+                Utils.shareWhatsApp(profileUrl, `Check out my portfolio: ${profileUrl}`);
+            });
+            $('#caseShareEmail')?.addEventListener('click', () => {
+                Utils.shareEmail(profileUrl, user.fullName);
+            });
+            $('#caseDownloadQR')?.addEventListener('click', () => {
+                const qrCanvas = $('#caseCodeQR canvas');
+                if (qrCanvas) {
+                    const link = document.createElement('a');
+                    link.download = `CASE-QR-${user.username}.png`;
+                    link.href = qrCanvas.toDataURL();
+                    link.click();
+                }
+            });
+        }
 
         // Preview card
         updatePreviewCard(user, projects, certs);

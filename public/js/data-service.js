@@ -166,8 +166,13 @@ const DataService = (() => {
             return { available: false, reason: 'Invalid format (3-20 lowercase letters, numbers, underscores)' };
         }
 
-        const user = await getUser();
-        if (user && user.username === username) return { available: true };
+        // If user is logged in, allow them to keep their own username
+        try {
+            const user = await getUser();
+            if (user && user.username === username) return { available: true };
+        } catch (_) {
+            // Not authenticated — that's fine for signup, continue checking
+        }
 
         const snap = await db.collection('usernames').doc(username).get();
         return { available: !snap.exists };

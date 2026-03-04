@@ -48,6 +48,8 @@ const Utils = (() => {
 
     // ── Copy Button Handler ──
     function initCopyButton(btn, getText) {
+        if (!btn || btn._copyInitialized) return;
+        btn._copyInitialized = true;
         btn.addEventListener('click', async () => {
             const text = typeof getText === 'function' ? getText() : getText;
             const ok = await copyToClipboard(text);
