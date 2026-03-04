@@ -124,29 +124,6 @@
 
 ---
 
-## Trust Badge Row
-
-```html
-<div class="trust-row">
-  <span>✔ No credit card</span>
-  <span>✔ Deploy in seconds</span>
-  <span>✔ Free forever</span>
-</div>
-```
-```css
-.trust-row {
-  display: flex;
-  gap: 24px;
-  font-size: 14px;
-  color: #94A3B8;
-  font-weight: 500;
-}
-.trust-row span { color: #94A3B8; }
-.trust-row span::first-letter { color: #3B82F6; }
-```
-
----
-
 ## Section Label
 
 ```css

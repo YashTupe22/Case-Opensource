@@ -225,10 +225,10 @@
         await delay(500);
         DOM.heroMockup.classList.add('visible');
 
-        // Restart deploy bar animation
+        // Restart link-added bar animation
         DOM.deployBarFill.style.animation = 'none';
         void DOM.deployBarFill.offsetWidth; // trigger reflow
-        DOM.deployBarFill.style.animation = 'deployBar 3s ease-out forwards';
+        DOM.deployBarFill.style.animation = 'deployBar 2.5s ease-out forwards';
 
         // Step 6: 3.0s — Gradient mesh begins
         await delay(500);

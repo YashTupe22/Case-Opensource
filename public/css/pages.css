@@ -535,6 +535,15 @@
   .page__content {
     padding-top: calc(70px + var(--space-6));
   }
+  .page__title {
+    font-size: clamp(24px, 6vw, 32px);
+  }
+  .page__subtitle {
+    font-size: 14px;
+  }
+  .page-section__text {
+    font-size: 14px;
+  }
   .page-footer__inner {
     text-align: center;
   }
@@ -553,10 +562,26 @@
   .team-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .value-card {
+    padding: var(--space-3);
+  }
 }
 
 @media (max-width: 400px) {
   .team-grid {
     grid-template-columns: 1fr;
+  }
+  .page-topbar__cta {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+  .page__badge {
+    font-size: 11px;
+  }
+  .blog-card__title {
+    font-size: 18px;
+  }
+  .blog-card__excerpt {
+    font-size: 13px;
   }
 }

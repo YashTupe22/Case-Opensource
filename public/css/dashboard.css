@@ -784,4 +784,27 @@
   .code-panel__actions { flex-direction: column; }
 
   .welcome__greeting { font-size: 20px; }
+  .welcome { padding: var(--space-2) var(--space-3); }
+
+  .share-center__qr-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .share-center__qr-text { text-align: center; }
+  .share-center__heading { font-size: 22px; }
+}
+
+@media (max-width: 480px) {
+  .main { padding: 56px 12px 20px; }
+  .stat-card { padding: var(--space-2); }
+  .stat-card__value { font-size: 24px; }
+  .code-panel { padding: var(--space-3); }
+  .code-panel__code { font-size: 16px; letter-spacing: 0.1em; padding: 10px 16px; }
+  .share-center__code { font-size: 18px; padding: 12px 20px; letter-spacing: 0.15em; }
+  .share-center__link { font-size: 13px; word-break: break-all; }
+  .project-card__name { font-size: 16px; }
+  .avatar-upload { flex-direction: column; align-items: center; text-align: center; }
+  .profile-form__section-title { font-size: 14px; }
+  .quick-actions { flex-direction: column; }
+  .quick-actions .btn { width: 100%; justify-content: center; }
 }
