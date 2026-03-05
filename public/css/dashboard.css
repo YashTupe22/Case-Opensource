@@ -2,6 +2,39 @@
    CASE — Dashboard Styles
    ═══════════════════════════════════════════════════ */
 
+/* ─── Skeleton Loaders ─── */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.06) 50%,
+    transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.skeleton-text {
+  display: inline-block;
+  width: 40px;
+  height: 1em;
+  background: var(--border-light);
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
 /* ─── Layout ─── */
 .dash {
   display: flex;
@@ -372,6 +405,24 @@
   margin-bottom: var(--space-2);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+.profile-form__section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin: 20px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.profile-form__section-label::before,
+.profile-form__section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
 }
 
 /* Avatar Upload */

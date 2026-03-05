@@ -84,9 +84,12 @@
     // ═══════════════════════════════════════
 
     async function loadOverview() {
-        const user = await DataService.getUser();
-        const projects = await DataService.getProjects();
-        const certs = await DataService.getCertificates();
+        // Fetch base data first to populate cache, then completion hits cache (no duplicate reads)
+        const [user, projects, certs] = await Promise.all([
+            DataService.getUser(),
+            DataService.getProjects(),
+            DataService.getCertificates(),
+        ]);
         const completion = await DataService.getProfileCompletion();
 
         // Welcome
@@ -112,6 +115,8 @@
             });
         }
 
+        // Remove skeleton state from stat cards
+        ['#statCard1','#statCard2','#statCard3'].forEach(id => $(id)?.classList.remove('skeleton-card'));
         // Stats (count-up)
         Utils.animateCount($('#statViews'), user.stats?.profileViews || 0);
         Utils.animateCount($('#statProjects'), projects.length);
@@ -179,6 +184,13 @@
         $('#inputGithub').value = user.socialLinks?.github || '';
         $('#inputLinkedin').value = user.socialLinks?.linkedin || '';
         $('#inputPortfolio').value = user.socialLinks?.portfolio || '';
+        $('#inputTwitter').value = user.socialLinks?.twitter || '';
+        $('#inputInstagram').value = user.socialLinks?.instagram || '';
+        $('#inputYoutube').value = user.socialLinks?.youtube || '';
+        $('#inputLeetcode').value = user.socialLinks?.leetcode || '';
+        $('#inputHackerrank').value = user.socialLinks?.hackerrank || '';
+        $('#inputWhatsapp').value = user.socialLinks?.whatsapp || '';
+        $('#inputTelegram').value = user.socialLinks?.telegram || '';
 
         // Bio counter
         $('#bioCount').textContent = (user.bio || '').length;
@@ -269,6 +281,13 @@
                         github: $('#inputGithub').value.trim(),
                         linkedin: $('#inputLinkedin').value.trim(),
                         portfolio: $('#inputPortfolio').value.trim(),
+                        twitter: $('#inputTwitter').value.trim(),
+                        instagram: $('#inputInstagram').value.trim(),
+                        youtube: $('#inputYoutube').value.trim(),
+                        leetcode: $('#inputLeetcode').value.trim(),
+                        hackerrank: $('#inputHackerrank').value.trim(),
+                        whatsapp: $('#inputWhatsapp').value.trim(),
+                        telegram: $('#inputTelegram').value.trim(),
                     },
                 });
 
@@ -775,9 +794,11 @@
     let caseCodeListenersAttached = false;
 
     async function loadCaseCode() {
-        const user = await DataService.getUser();
-        const projects = await DataService.getProjects();
-        const certs = await DataService.getCertificates();
+        const [user, projects, certs] = await Promise.all([
+            DataService.getUser(),
+            DataService.getProjects(),
+            DataService.getCertificates(),
+        ]);
         const profileUrl = `case.app/@${user.username}`;
         const fullUrl = window.location.origin + `/public/profile.html?u=${user.username}`;
 
@@ -886,7 +907,15 @@
         initQualifications();
         initExperiences();
         initDeleteModal();
-        loadOverview();
+
+        // Pre-warm all data in parallel so section switches are instant
+        Promise.all([
+            DataService.getUser(),
+            DataService.getProjects(),
+            DataService.getCertificates(),
+            DataService.getQualifications(),
+            DataService.getExperiences(),
+        ]).then(() => loadOverview());
     }
 
     if (document.readyState === 'loading') {
