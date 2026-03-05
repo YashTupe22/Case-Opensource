@@ -609,6 +609,160 @@
   overflow: hidden;
 }
 
+/* ═══════════════ QUALIFICATIONS MANAGER ═══════════════ */
+
+.quals-add {
+  margin-bottom: var(--space-3);
+}
+.quals-add__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.quals-add .btn {
+  margin-top: 4px;
+}
+
+.qual-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.qual-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.2s, opacity 0.3s, max-height 0.3s;
+}
+.qual-row:last-child { border-bottom: none; }
+.qual-row__icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.qual-row__info {
+  flex: 1;
+  min-width: 0;
+}
+.qual-row__degree {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.qual-row__institution {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.qual-row__meta {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  display: flex;
+  gap: 6px;
+}
+.qual-row__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.qual-row--confirm {
+  background: rgba(239, 68, 68, 0.06);
+}
+.qual-row--deleting {
+  opacity: 0;
+  max-height: 0;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
+/* ═══════════════ EXPERIENCES MANAGER ═══════════════ */
+
+.exps-add {
+  margin-bottom: var(--space-3);
+}
+.exps-add__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.exps-add .btn {
+  margin-top: 4px;
+}
+
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.exp-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.2s, opacity 0.3s, max-height 0.3s;
+}
+.exp-row:last-child { border-bottom: none; }
+.exp-row__icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.exp-row__info {
+  flex: 1;
+  min-width: 0;
+}
+.exp-row__title {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.exp-row__company {
+  font-size: 13px;
+  color: var(--accent-blue);
+  margin-top: 2px;
+}
+.exp-row__meta {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+.exp-row__desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.exp-row__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.exp-row--confirm {
+  background: rgba(239, 68, 68, 0.06);
+}
+.exp-row--deleting {
+  opacity: 0;
+  max-height: 0;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
 /* ═══════════════ MY CASE CODE (dedicated) ═══════════════ */
 
 .share-center {
@@ -780,6 +934,8 @@
 
   .certs-add { flex-direction: column; }
   .certs-add .btn { width: 100%; justify-content: center; }
+  .quals-add__row { grid-template-columns: 1fr; }
+  .exps-add__row { grid-template-columns: 1fr; }
 
   .code-panel__actions { flex-direction: column; }
 

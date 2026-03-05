@@ -49,6 +49,8 @@
             renderSocialLinks(data.user);
             renderProjects(data.projects);
             renderCertificates(data.certificates);
+            renderQualifications(data.qualifications);
+            renderExperiences(data.experiences);
 
             // Owner detection (non-blocking)
             detectOwner(data.user.uid);
@@ -298,6 +300,60 @@
         return null;
     }
 
+    /* ═══════════════ QUALIFICATIONS ═══════════════ */
+    function renderQualifications(quals) {
+        const section = document.getElementById('qualsSection');
+        const grid = document.getElementById('qualsGrid');
+        const countEl = document.getElementById('qualCount');
+
+        if (!quals || quals.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        countEl.textContent = `${quals.length} qualification${quals.length !== 1 ? 's' : ''}`;
+
+        grid.innerHTML = quals.map(q => `
+            <div class="pub-qual-card">
+                <div class="pub-qual-card__icon">🎓</div>
+                <div class="pub-qual-card__content">
+                    <div class="pub-qual-card__degree">${Utils.escapeHTML(q.degree)}</div>
+                    <div class="pub-qual-card__institution">${Utils.escapeHTML(q.institution)}</div>
+                    <div class="pub-qual-card__meta">
+                        ${q.year ? `<span class="pub-qual-card__year">${Utils.escapeHTML(q.year)}</span>` : ''}
+                        ${q.grade ? `<span class="pub-qual-card__grade">${Utils.escapeHTML(q.grade)}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    /* ═══════════════ EXPERIENCES ═══════════════ */
+    function renderExperiences(exps) {
+        const section = document.getElementById('expsSection');
+        const grid = document.getElementById('expsGrid');
+        const countEl = document.getElementById('expCount');
+
+        if (!exps || exps.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        countEl.textContent = `${exps.length} experience${exps.length !== 1 ? 's' : ''}`;
+
+        grid.innerHTML = exps.map(e => `
+            <div class="pub-exp-card">
+                <div class="pub-exp-card__icon">💼</div>
+                <div class="pub-exp-card__content">
+                    <div class="pub-exp-card__title">${Utils.escapeHTML(e.title)}</div>
+                    <div class="pub-exp-card__company">${Utils.escapeHTML(e.company)}</div>
+                    ${e.duration ? `<div class="pub-exp-card__duration">${Utils.escapeHTML(e.duration)}</div>` : ''}
+                    ${e.description ? `<div class="pub-exp-card__desc">${Utils.escapeHTML(e.description)}</div>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
     /* ═══════════════ CERTIFICATE MODAL ═══════════════ */
     function initCertModal() {
         const modal = document.getElementById('certModal');
@@ -360,6 +416,8 @@
             ['socialsSection', 300],
             ['projectsSection', 500],
             ['certsSection', 700],
+            ['qualsSection', 900],
+            ['expsSection', 1100],
         ];
         delays.forEach(([id, ms]) => {
             setTimeout(() => {
@@ -385,7 +443,7 @@
             { threshold: 0.1 }
         );
 
-        document.querySelectorAll('.pub-project-card, .pub-cert-card, .social-link-card').forEach(card => {
+        document.querySelectorAll('.pub-project-card, .pub-cert-card, .social-link-card, .pub-qual-card, .pub-exp-card').forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(16px)';
             card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';

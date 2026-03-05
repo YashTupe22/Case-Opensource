@@ -295,6 +295,132 @@ const DataService = (() => {
     }
 
     // ═══════════════════════════════════════
+    //  QUALIFICATIONS (subcollection)
+    // ═══════════════════════════════════════
+
+    /**
+     * Get all qualifications for the current user.
+     * @returns {Promise<Array>}
+     */
+    async function getQualifications() {
+        const snap = await _userRef()
+            .collection('qualifications')
+            .orderBy('createdAt', 'desc')
+            .get();
+
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+
+    /**
+     * Add a new qualification.
+     * @param {Object} qual — { degree, institution, year, grade }
+     * @returns {Promise<Object>} created qualification with id
+     */
+    async function addQualification(qual) {
+        const quals = await getQualifications();
+        if (quals.length >= 10) throw new Error('Maximum 10 qualifications. Remove one to add more.');
+
+        const id = _generateId();
+        const data = {
+            degree: qual.degree || '',
+            institution: qual.institution || '',
+            year: qual.year || '',
+            grade: qual.grade || '',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+
+        await _userRef().collection('qualifications').doc(id).set(data);
+        return { id, ...data };
+    }
+
+    /**
+     * Update an existing qualification.
+     * @param {string} id — qualification document id
+     * @param {Object} updates — fields to merge
+     * @returns {Promise<Object>}
+     */
+    async function updateQualification(id, updates) {
+        const ref = _userRef().collection('qualifications').doc(id);
+        await ref.update({
+            ...updates,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        const snap = await ref.get();
+        return { id: snap.id, ...snap.data() };
+    }
+
+    /**
+     * Delete a qualification.
+     * @param {string} id
+     */
+    async function deleteQualification(id) {
+        await _userRef().collection('qualifications').doc(id).delete();
+    }
+
+    // ═══════════════════════════════════════
+    //  EXPERIENCES (subcollection)
+    // ═══════════════════════════════════════
+
+    /**
+     * Get all experiences for the current user.
+     * @returns {Promise<Array>}
+     */
+    async function getExperiences() {
+        const snap = await _userRef()
+            .collection('experiences')
+            .orderBy('createdAt', 'desc')
+            .get();
+
+        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+
+    /**
+     * Add a new experience.
+     * @param {Object} exp — { title, company, duration, description }
+     * @returns {Promise<Object>} created experience with id
+     */
+    async function addExperience(exp) {
+        const exps = await getExperiences();
+        if (exps.length >= 10) throw new Error('Maximum 10 experiences. Remove one to add more.');
+
+        const id = _generateId();
+        const data = {
+            title: exp.title || '',
+            company: exp.company || '',
+            duration: exp.duration || '',
+            description: exp.description || '',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+
+        await _userRef().collection('experiences').doc(id).set(data);
+        return { id, ...data };
+    }
+
+    /**
+     * Update an existing experience.
+     * @param {string} id — experience document id
+     * @param {Object} updates — fields to merge
+     * @returns {Promise<Object>}
+     */
+    async function updateExperience(id, updates) {
+        const ref = _userRef().collection('experiences').doc(id);
+        await ref.update({
+            ...updates,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        const snap = await ref.get();
+        return { id: snap.id, ...snap.data() };
+    }
+
+    /**
+     * Delete an experience.
+     * @param {string} id
+     */
+    async function deleteExperience(id) {
+        await _userRef().collection('experiences').doc(id).delete();
+    }
+
+    // ═══════════════════════════════════════
     //  CASE CODE / PUBLIC PROFILE LOOKUP
     // ═══════════════════════════════════════
 
@@ -353,17 +479,21 @@ const DataService = (() => {
         // Increment view count
         await incrementViews(uid);
 
-        // Fetch projects & certificates in parallel
-        const [projSnap, certSnap] = await Promise.all([
+        // Fetch projects, certificates, qualifications & experiences in parallel
+        const [projSnap, certSnap, qualSnap, expSnap] = await Promise.all([
             db.collection('users').doc(uid).collection('projects').orderBy('createdAt', 'desc').get(),
             db.collection('users').doc(uid).collection('certificates').orderBy('createdAt', 'desc').get(),
+            db.collection('users').doc(uid).collection('qualifications').orderBy('createdAt', 'desc').get(),
+            db.collection('users').doc(uid).collection('experiences').orderBy('createdAt', 'desc').get(),
         ]);
 
         const user = { uid, ...userSnap.data() };
         const projects = projSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const certificates = certSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const qualifications = qualSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const experiences = expSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-        return { found: true, user, projects, certificates };
+        return { found: true, user, projects, certificates, qualifications, experiences };
     }
 
     // ═══════════════════════════════════════
@@ -384,6 +514,14 @@ const DataService = (() => {
         getCertificates,
         addCertificate,
         deleteCertificate,
+        getQualifications,
+        addQualification,
+        updateQualification,
+        deleteQualification,
+        getExperiences,
+        addExperience,
+        updateExperience,
+        deleteExperience,
         lookupProfile,
         getPublicProfile,
     };

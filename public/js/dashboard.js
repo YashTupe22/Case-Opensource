@@ -73,6 +73,8 @@
             case 'edit-profile': await loadEditProfile(); break;
             case 'projects': await loadProjects(); break;
             case 'certificates': await loadCertificates(); break;
+            case 'qualifications': await loadQualifications(); break;
+            case 'experiences': await loadExperiences(); break;
             case 'case-code': await loadCaseCode(); break;
         }
     }
@@ -553,6 +555,220 @@
     }
 
     // ═══════════════════════════════════════
+    //  QUALIFICATIONS
+    // ═══════════════════════════════════════
+
+    async function loadQualifications() {
+        const quals = await DataService.getQualifications();
+        const list = $('#qualList');
+        const limitNotice = $('#qualsLimit');
+        const addForm = $('#qualsAddForm');
+
+        if (quals.length >= 10) {
+            limitNotice.style.display = 'block';
+            addForm.style.display = 'none';
+        } else {
+            limitNotice.style.display = 'none';
+            addForm.style.display = '';
+        }
+
+        if (quals.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div style="font-size:40px;opacity:0.4">📚</div>
+                    <div class="empty-state__text">No qualifications added yet.</div>
+                </div>
+            `;
+            setTimeout(() => $('#qualDegree')?.focus(), 200);
+            return;
+        }
+
+        list.innerHTML = quals.map(q => `
+            <div class="qual-row" data-qual-id="${q.id}">
+                <div class="qual-row__icon">🎓</div>
+                <div class="qual-row__info">
+                    <div class="qual-row__degree">${Utils.escapeHTML(q.degree)}</div>
+                    <div class="qual-row__institution">${Utils.escapeHTML(q.institution)}</div>
+                    <div class="qual-row__meta">
+                        ${q.year ? `<span>${Utils.escapeHTML(q.year)}</span>` : ''}
+                        ${q.grade ? `<span>· ${Utils.escapeHTML(q.grade)}</span>` : ''}
+                    </div>
+                </div>
+                <div class="qual-row__actions">
+                    <button class="btn btn--danger btn--small" data-delete-qual="${q.id}">Delete</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Delete handlers
+        list.querySelectorAll('[data-delete-qual]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const row = btn.closest('.qual-row');
+                const id = btn.dataset.deleteQual;
+
+                if (row.classList.contains('qual-row--confirm')) {
+                    row.classList.add('qual-row--deleting');
+                    setTimeout(async () => {
+                        await DataService.deleteQualification(id);
+                        await loadQualifications();
+                        Utils.toast('Qualification removed', 'success');
+                    }, 300);
+                } else {
+                    row.classList.add('qual-row--confirm');
+                    const actions = row.querySelector('.qual-row__actions');
+                    actions.innerHTML = `
+                        <span style="color:var(--danger);font-size:13px;margin-right:8px">Are you sure?</span>
+                        <button class="btn btn--secondary btn--small qual-cancel">No</button>
+                        <button class="btn btn--danger btn--small qual-confirm" data-delete-qual="${id}">Yes</button>
+                    `;
+                    actions.querySelector('.qual-cancel').addEventListener('click', () => loadQualifications());
+                    actions.querySelector('.qual-confirm').addEventListener('click', async () => {
+                        row.classList.add('qual-row--deleting');
+                        setTimeout(async () => {
+                            await DataService.deleteQualification(id);
+                            await loadQualifications();
+                            Utils.toast('Qualification removed', 'success');
+                        }, 300);
+                    });
+                }
+            });
+        });
+    }
+
+    function initQualifications() {
+        $('#addQualBtn')?.addEventListener('click', async () => {
+            const degree = $('#qualDegree').value.trim();
+            const institution = $('#qualInstitution').value.trim();
+            const year = $('#qualYear').value.trim();
+            const grade = $('#qualGrade').value.trim();
+
+            if (!degree || !institution) {
+                Utils.toast('Please fill degree and institution', 'error');
+                return;
+            }
+
+            try {
+                await DataService.addQualification({ degree, institution, year, grade });
+                $('#qualDegree').value = '';
+                $('#qualInstitution').value = '';
+                $('#qualYear').value = '';
+                $('#qualGrade').value = '';
+                await loadQualifications();
+                Utils.toast('Qualification added', 'success');
+            } catch (err) {
+                Utils.toast(err.message || 'Something went wrong', 'error');
+            }
+        });
+    }
+
+    // ═══════════════════════════════════════
+    //  EXPERIENCES
+    // ═══════════════════════════════════════
+
+    async function loadExperiences() {
+        const exps = await DataService.getExperiences();
+        const list = $('#expList');
+        const limitNotice = $('#expsLimit');
+        const addForm = $('#expsAddForm');
+
+        if (exps.length >= 10) {
+            limitNotice.style.display = 'block';
+            addForm.style.display = 'none';
+        } else {
+            limitNotice.style.display = 'none';
+            addForm.style.display = '';
+        }
+
+        if (exps.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div style="font-size:40px;opacity:0.4">💼</div>
+                    <div class="empty-state__text">No experiences added yet.</div>
+                </div>
+            `;
+            setTimeout(() => $('#expTitle')?.focus(), 200);
+            return;
+        }
+
+        list.innerHTML = exps.map(e => `
+            <div class="exp-row" data-exp-id="${e.id}">
+                <div class="exp-row__icon">💼</div>
+                <div class="exp-row__info">
+                    <div class="exp-row__title">${Utils.escapeHTML(e.title)}</div>
+                    <div class="exp-row__company">${Utils.escapeHTML(e.company)}</div>
+                    <div class="exp-row__meta">
+                        ${e.duration ? `<span>${Utils.escapeHTML(e.duration)}</span>` : ''}
+                    </div>
+                    ${e.description ? `<div class="exp-row__desc">${Utils.escapeHTML(e.description)}</div>` : ''}
+                </div>
+                <div class="exp-row__actions">
+                    <button class="btn btn--danger btn--small" data-delete-exp="${e.id}">Delete</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Delete handlers
+        list.querySelectorAll('[data-delete-exp]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const row = btn.closest('.exp-row');
+                const id = btn.dataset.deleteExp;
+
+                if (row.classList.contains('exp-row--confirm')) {
+                    row.classList.add('exp-row--deleting');
+                    setTimeout(async () => {
+                        await DataService.deleteExperience(id);
+                        await loadExperiences();
+                        Utils.toast('Experience removed', 'success');
+                    }, 300);
+                } else {
+                    row.classList.add('exp-row--confirm');
+                    const actions = row.querySelector('.exp-row__actions');
+                    actions.innerHTML = `
+                        <span style="color:var(--danger);font-size:13px;margin-right:8px">Are you sure?</span>
+                        <button class="btn btn--secondary btn--small exp-cancel">No</button>
+                        <button class="btn btn--danger btn--small exp-confirm" data-delete-exp="${id}">Yes</button>
+                    `;
+                    actions.querySelector('.exp-cancel').addEventListener('click', () => loadExperiences());
+                    actions.querySelector('.exp-confirm').addEventListener('click', async () => {
+                        row.classList.add('exp-row--deleting');
+                        setTimeout(async () => {
+                            await DataService.deleteExperience(id);
+                            await loadExperiences();
+                            Utils.toast('Experience removed', 'success');
+                        }, 300);
+                    });
+                }
+            });
+        });
+    }
+
+    function initExperiences() {
+        $('#addExpBtn')?.addEventListener('click', async () => {
+            const title = $('#expTitle').value.trim();
+            const company = $('#expCompany').value.trim();
+            const duration = $('#expDuration').value.trim();
+            const description = $('#expDesc').value.trim();
+
+            if (!title || !company) {
+                Utils.toast('Please fill title and company', 'error');
+                return;
+            }
+
+            try {
+                await DataService.addExperience({ title, company, duration, description });
+                $('#expTitle').value = '';
+                $('#expCompany').value = '';
+                $('#expDuration').value = '';
+                $('#expDesc').value = '';
+                await loadExperiences();
+                Utils.toast('Experience added', 'success');
+            } catch (err) {
+                Utils.toast(err.message || 'Something went wrong', 'error');
+            }
+        });
+    }
+
+    // ═══════════════════════════════════════
     //  MY CASE CODE
     // ═══════════════════════════════════════
 
@@ -667,6 +883,8 @@
         initEditProfile();
         initProjectModal();
         initCertificates();
+        initQualifications();
+        initExperiences();
         initDeleteModal();
         loadOverview();
     }

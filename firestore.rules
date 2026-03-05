@@ -55,6 +55,30 @@ service cloud.firestore {
         allow update: if isOwner(uid);
         allow delete: if isOwner(uid);
       }
+
+      // ── Qualifications subcollection ──
+      // users/{uid}/qualifications/{qualId}
+      match /qualifications/{qualId} {
+        // Anyone can read (public profile)
+        allow read: if true;
+
+        // Only the owner can create, update, delete
+        allow create: if isOwner(uid);
+        allow update: if isOwner(uid);
+        allow delete: if isOwner(uid);
+      }
+
+      // ── Experiences subcollection ──
+      // users/{uid}/experiences/{expId}
+      match /experiences/{expId} {
+        // Anyone can read (public profile)
+        allow read: if true;
+
+        // Only the owner can create, update, delete
+        allow create: if isOwner(uid);
+        allow update: if isOwner(uid);
+        allow delete: if isOwner(uid);
+      }
     }
 
     // ═══════════════════════════════════════

@@ -509,6 +509,146 @@
 }
 
 /* ═══════════════════════════════════════
+   QUALIFICATION CARDS
+   ═══════════════════════════════════════ */
+.pub-quals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+.pub-qual-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--space-3);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.pub-qual-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.pub-qual-card__icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pub-qual-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pub-qual-card__degree {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.pub-qual-card__institution {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.pub-qual-card__meta {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pub-qual-card__year,
+.pub-qual-card__grade {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.12);
+  color: #10B981;
+}
+
+/* ═══════════════════════════════════════
+   EXPERIENCE CARDS
+   ═══════════════════════════════════════ */
+.pub-exps-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.pub-exp-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--space-3);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.pub-exp-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.pub-exp-card__icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pub-exp-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pub-exp-card__title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.pub-exp-card__company {
+  font-size: 14px;
+  color: var(--accent-blue);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.pub-exp-card__duration {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.12);
+  color: #F59E0B;
+}
+
+.pub-exp-card__desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+/* ═══════════════════════════════════════
    CERTIFICATE PREVIEW MODAL
    ═══════════════════════════════════════ */
 .cert-modal {
@@ -653,6 +793,7 @@
   .profile-hero__name { font-size: 30px; }
   .pub-projects-grid { grid-template-columns: 1fr; }
   .pub-certs-grid { grid-template-columns: 1fr; }
+  .pub-quals-grid { grid-template-columns: 1fr; }
   .cert-modal__content { max-height: 85vh; }
 }
 
@@ -668,6 +809,7 @@
 
   .pub-projects-grid { grid-template-columns: 1fr; }
   .pub-certs-grid { grid-template-columns: 1fr; }
+  .pub-quals-grid { grid-template-columns: 1fr; }
 
   .social-links-grid { flex-direction: column; }
   .social-link-card { min-width: unset; }

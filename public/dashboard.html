@@ -68,6 +68,22 @@
           </svg>
           Certificates
         </button>
+        <button class="sidebar__link" data-section="qualifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            <line x1="9" y1="7" x2="17" y2="7" />
+            <line x1="9" y1="11" x2="15" y2="11" />
+          </svg>
+          Qualifications
+        </button>
+        <button class="sidebar__link" data-section="experiences">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+          </svg>
+          Experiences
+        </button>
         <button class="sidebar__link" data-section="case-code">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -296,6 +312,72 @@
         </div>
 
         <div class="cert-list" id="certList"></div>
+      </div>
+
+      <!-- ── QUALIFICATIONS ── -->
+      <div class="main__section" id="sec-qualifications">
+        <h2 class="section-title">Qualifications</h2>
+
+        <div class="certs-limit" id="qualsLimit" style="display:none">Maximum 10 qualifications. Remove one to add more.</div>
+
+        <div class="quals-add" id="qualsAddForm">
+          <div class="quals-add__row">
+            <div class="field">
+              <label class="field__label" for="qualDegree">Degree / Course *</label>
+              <input type="text" class="input" id="qualDegree" placeholder="e.g. B.Tech Computer Science" />
+            </div>
+            <div class="field">
+              <label class="field__label" for="qualInstitution">Institution *</label>
+              <input type="text" class="input" id="qualInstitution" placeholder="e.g. MIT" />
+            </div>
+          </div>
+          <div class="quals-add__row">
+            <div class="field">
+              <label class="field__label" for="qualYear">Year</label>
+              <input type="text" class="input" id="qualYear" placeholder="e.g. 2020 – 2024" />
+            </div>
+            <div class="field">
+              <label class="field__label" for="qualGrade">Grade / CGPA</label>
+              <input type="text" class="input" id="qualGrade" placeholder="e.g. 8.5 CGPA" />
+            </div>
+          </div>
+          <button class="btn btn--primary" id="addQualBtn">+ Add Qualification</button>
+        </div>
+
+        <div class="qual-list" id="qualList"></div>
+      </div>
+
+      <!-- ── EXPERIENCES ── -->
+      <div class="main__section" id="sec-experiences">
+        <h2 class="section-title">Experiences</h2>
+
+        <div class="certs-limit" id="expsLimit" style="display:none">Maximum 10 experiences. Remove one to add more.</div>
+
+        <div class="exps-add" id="expsAddForm">
+          <div class="exps-add__row">
+            <div class="field">
+              <label class="field__label" for="expTitle">Role / Title *</label>
+              <input type="text" class="input" id="expTitle" placeholder="e.g. Frontend Developer Intern" />
+            </div>
+            <div class="field">
+              <label class="field__label" for="expCompany">Company / Organization *</label>
+              <input type="text" class="input" id="expCompany" placeholder="e.g. Google" />
+            </div>
+          </div>
+          <div class="exps-add__row">
+            <div class="field">
+              <label class="field__label" for="expDuration">Duration</label>
+              <input type="text" class="input" id="expDuration" placeholder="e.g. Jun 2024 – Aug 2024" />
+            </div>
+            <div class="field">
+              <label class="field__label" for="expDesc">Description</label>
+              <input type="text" class="input" id="expDesc" placeholder="Brief about your role" />
+            </div>
+          </div>
+          <button class="btn btn--primary" id="addExpBtn">+ Add Experience</button>
+        </div>
+
+        <div class="exp-list" id="expList"></div>
       </div>
 
       <!-- ── MY CASE CODE ── -->
